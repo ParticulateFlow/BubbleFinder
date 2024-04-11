@@ -1,12 +1,8 @@
 import torch
 import torchvision
-import sys
-
 from engine import train_one_epoch, evaluate
 import utils as utils
-
 import time
-import glob
 
 import bubble
 
@@ -15,8 +11,9 @@ def main():
     print("Pytorch version " + torch.__version__)
     print("torchvision version " + torchvision.__version__)
 
-    pathName = sys.argv[1]
-    print("Doing " + pathName + "...")
+    #pathName = sys.argv[1]
+    #print("Doing " + pathName + "...")
+    pathName = './generatedBubbleImages/100images_100bubbles_20minDistance_95aperture/'
 
     train = True
 
@@ -28,7 +25,7 @@ def main():
         # train on the GPU or on the CPU, if a GPU is not available
         device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
-        # our dataset has two classes only - background and person
+        # our dataset has two classes only - background and bubble
         num_classes = 2
         # use our dataset and defined transformations
         dataset = bubble.BubbleDataset(pathName, bubble.get_transform(train=True))
@@ -38,10 +35,8 @@ def main():
         indices = torch.randperm(len(dataset)).tolist()
         trainPerct = 0.8
         dataset_train = torch.utils.data.Subset(dataset, indices[:int(trainPerct * len(dataset))])
-        #print(indices[:int(trainPerct * len(dataset))])
 
         dataset_test = torch.utils.data.Subset(dataset_test, indices[int(trainPerct * len(dataset)) + 1:])
-        #print(indices[int(trainPerct * len(dataset)) + 1:])
 
 
         # define training and validation data loaders
@@ -69,7 +64,7 @@ def main():
                                                        gamma=0.1)
 
         # let's train it for 10 epochs
-        num_epochs = 1
+        num_epochs = 10
 
         for epoch in range(num_epochs):
 
