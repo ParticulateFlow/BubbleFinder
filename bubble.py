@@ -11,7 +11,7 @@ import transforms as T
 from torchvision import transforms as TT
 
 import random
-import cv2
+import cv2 as cv
 
 
 class BubbleDataset(object):
@@ -26,69 +26,55 @@ class BubbleDataset(object):
 
     def __getitem__(self, idx):
         # load images and masks
-        img_path = self.imgs[idx]
-        mask_path = self.masks[idx]
-        bbs_path = self.bbs[idx]
-        label_path = self.labels[idx]
+        imagePath = self.imgs[idx]
+        maskPath = self.masks[idx]
+        boundingBoxPath = self.bbs[idx]
+        labelPath = self.labels[idx]
 
-        #print(img_path)
-        img = Image.open(img_path).convert("RGB")
-        img_size = (img.width, img.height)
+        #print(imagePath)
+        img = Image.open(imagePath).convert("RGB")
+        imageSize = (img.height, img.width)
 
-        labels: [str] = []
-        with open(label_path) as f:
+        labels = []
+        with open(labelPath) as f:
             for i, line in enumerate(f):
                 labels.append(line.strip())
         num_objs = len(labels)
 
-        boxes: [[int]] = []
-        with open(bbs_path) as f:
+        boxes = []
+        with open(boundingBoxPath) as f:
             for i, line in enumerate(f):
                 spline = line.split('\t')
-                spline.pop()
-                for s in spline:
-                    if s == '':
-                        print(bla)
                 spline = [int(s) for s in spline]
                 boxes.append(spline)
 
         masks = np.zeros((num_objs,) + (img.height, img.width))
-        with open(mask_path) as f:
+        with open(maskPath) as f:
             for i, line in enumerate(f):
                 spline = line.split('\t')
-                spline.pop()
+                #spline.pop()
                 spline = [int(s) for s in spline]
-                mask = np.zeros(img_size)
-                rmask = np.ravel(mask)
-                rmask[spline] = 1
-                mask = np.reshape(rmask, img_size)
-                mask = np.swapaxes(mask, 0, 1)
+                mask = np.zeros(imageSize)
+                ids = np.unravel_index(spline, imageSize)
+                mask[ids] = 1
 
                 masks[i, :, :] = mask
 
-                # Test if masks and images align
-                #rgb_mask = random_color_masks(mask)
-                #cv2.imwrite('test/Mask' + f"{i:06d}.jpg", rgb_mask)
-                #cv2.imshow('', rgb_mask)
-                #cv2.waitKey(0)
-
-        # Test all masks
+        # #Test masks
         # np_img = np.array(img)
         # for i in range(num_objs):
-        #     rgb_mask = random_color_masks(np.array(masks[i, :, :]))
-        #     np_img = cv2.addWeighted(np_img, 1, rgb_mask, 0.5, 0)
-        #cv2.imwrite('test/' + f"{idx:06d}.jpg", np_img)
-
+        #     rgbMask = random_color_masks(np.array(masks[i, :, :]))
+        #     np_img = cv.addWeighted(np_img, 1, rgbMask, 0.5, 0)
+        # cv.imshow('', np_img)
+        # cv.waitKey(0)
 
         boxes = torch.as_tensor(boxes, dtype=torch.float32)
         labels = torch.ones((num_objs,), dtype=torch.int64)
         masks = torch.as_tensor(masks, dtype=torch.uint8)
-
         image_id = torch.tensor([idx])
         area = (boxes[:, 3] - boxes[:, 1]) * (boxes[:, 2] - boxes[:, 0])
         # suppose all instances are not crowd
         iscrowd = torch.zeros((num_objs,), dtype=torch.int64)
-
 
         target = {}
         target["boxes"] = boxes
@@ -138,8 +124,8 @@ def get_transform(train):
 BUBBLE_CATEGORY_NAMES = ['__background__', 'bubble']
 
 
-def get_prediction(img_path, model, device, threshold=0.7):
-    img = Image.open(img_path)
+def get_prediction(imagePath, model, device, threshold=0.7):
+    img = Image.open(imagePath)
     transform = TT.ToTensor()
     img = transform(img)
     img = img.to(device)
@@ -172,12 +158,12 @@ def random_color_masks(image, single_color=False):
     return colored_mask
 
 
-def instance_segmentation(img_path, model, device, threshold=0.7, rect_th=1, text_size=1, text_th=2):
-    masks, boxes, pred_cls, pred_scores = get_prediction(img_path, model, device, threshold=threshold)
-    img = cv2.imread(img_path)
+def instance_segmentation(imagePath, model, device, threshold=0.7, rect_th=1, text_size=1, text_th=2):
+    masks, boxes, pred_cls, pred_scores = get_prediction(imagePath, model, device, threshold=threshold)
+    img = cv.imread(imagePath)
     for i in range(len(masks)):
-        rgb_mask = random_color_masks(masks[i], single_color=False)
-        img = cv2.addWeighted(img, 1, rgb_mask, 0.5, 0)
-        gray = cv2.cvtColor(rgb_mask, cv2.COLOR_BGR2GRAY)
-        cv2.rectangle(img, boxes[i][0], boxes[i][1], color=(0, 0, 0), thickness=rect_th)
+        rgbMas = random_color_masks(masks[i], single_color=False)
+        img = cv.addWeighted(img, 1, rgbMas, 0.5, 0)
+        gray = cv.cvtColor(rgbMas, cv.COLOR_BGR2GRAY)
+        cv.rectangle(img, boxes[i][0], boxes[i][1], color=(0, 0, 0), thickness=rect_th)
     return img, pred_cls, pred_scores, masks
