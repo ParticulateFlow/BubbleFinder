@@ -8,12 +8,13 @@ import time
 import glob
 
 import bubble
-import cv2
+import cv2 as cv
 import os
 
 def main():
-    pathName = sys.argv[1]
-    print("Doing " + pathName + "...")
+    #pathName = sys.argv[1]
+    #print("Doing " + pathName + "...")
+    pathName = './Inference/'
 
     print('inference...')
     t = time.time()
@@ -33,7 +34,7 @@ def main():
 
         if not os.path.exists(pathName + '/Results/'):
             os.makedirs(pathName + '/Results/')
-        cv2.imwrite(pathName + '/Results/' + os.path.basename(imgs[i]), img)
+        cv.imwrite(pathName + '/Results/' + os.path.basename(imgs[i]), img)
 
     dt = time.time() - t
     print(format(dt, ".2f"), ' sec for ', len(imgs), ' images')
