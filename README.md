@@ -29,7 +29,7 @@ The rest are helperfiles
 Know issues
 ----------
 - trackpy has a bug that gives the following error: TypeError: mean() got an unexpected keyword argument 'level'
-  here is a fix, if they haven't already fixed it themselves: https://github.com/soft-     matter/trackpy/pull/740/commits/a3d4322876110a22807cc3440f422d8f85c1590a
+  here is a fix, if they haven't already fixed it themselves: https://github.com/soft-matter/trackpy/pull/740/commits/a3d4322876110a22807cc3440f422d8f85c1590a
 
 
 
