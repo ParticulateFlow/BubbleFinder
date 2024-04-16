@@ -7,9 +7,8 @@ I've updated the code with data from the Million bubble dataset from Yucheng Fu 
 
 This neural network is based on the torchvision tutorial: https://pytorch.org/tutorials/intermediate/torchvision_tutorial.html
 
+code
 ----------
-code:
-
 singleBubbleImages.zip - contains the first 10000 single bubble images from the Million bubble dataset with corresponding masks
 
 generateBubbleImages.py - generates multi-bubble images from the single bubble data. You can set the image size, the number of bubbles, the number of images generated, the minimum distance between the center of the bubbles and the aperture (border around the image without bubbles, used to increase the bubble density without chaning any of the other parameters)
@@ -26,9 +25,9 @@ inference.py - runs the model on any image that you want. You can set a threshol
 track.py - performs both inference and tracking and colors the bubbles according to their ID. This file is used to create the supplemental video S2.
 
 The rest are helperfiles
-----------
-know issues:
 
+Know issues
+----------
 - trackpy has a bug that gives the following error: TypeError: mean() got an unexpected keyword argument 'level'
   here is a fix, if they haven't already fixed it themselves: https://github.com/soft-     matter/trackpy/pull/740/commits/a3d4322876110a22807cc3440f422d8f85c1590a
 
