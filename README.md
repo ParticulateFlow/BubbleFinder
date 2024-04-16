@@ -3,7 +3,7 @@ Easy and robust deep learning bubble segmentation
 
 This repository contains the files used to generate the data in the paper: Deep learning bubble segmentation on a shoestring (https://doi.org/10.1021/acs.iecr.3c04059)
 
-I've updated the code with data from the Million bubble dataset from Yucheng Fu (https://data.mendeley.com/datasets/mxnzxzc6v7/1), such that you can test the code without your own data or rewriting the dataloader.
+I've updated the code with data from the Million bubble dataset from Yucheng Fu (https://data.mendeley.com/datasets/mxnzxzc6v7/1, licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)), such that you can test the code without your own data or rewriting the dataloader. I've taken the first 10000 bubbles out of the .mat file for convenience and created a mask for each image with corresponding names in the folder masks.
 
 This neural network is based on the torchvision tutorial: https://pytorch.org/tutorials/intermediate/torchvision_tutorial.html
 
