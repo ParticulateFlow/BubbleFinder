@@ -7,7 +7,7 @@ import torchvision
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from torchvision.models.detection.mask_rcnn import MaskRCNNPredictor
 
-import transforms as T
+from functions import transforms as T
 from torchvision import transforms as TT
 
 import random

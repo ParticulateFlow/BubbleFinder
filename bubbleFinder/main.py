@@ -1,10 +1,10 @@
 import torch
 import torchvision
-from engine import train_one_epoch, evaluate
-import utils as utils
+from functions.engine import train_one_epoch, evaluate
+from functions import utils as utils
 import time
 
-import bubble
+from functions import bubble
 
 def main():
 
@@ -13,7 +13,7 @@ def main():
 
     #pathName = sys.argv[1]
     #print("Doing " + pathName + "...")
-    pathName = 'generatedBubbleImages/30images_60bubbles_20minDistance_95aperture'
+    pathName = './data/30images_60bubbles_20minDistance_95aperture'
 
     train = True
 

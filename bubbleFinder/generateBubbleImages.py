@@ -4,13 +4,13 @@ import glob
 import numpy as np
 from scipy.spatial.distance import cdist
 from tqdm import tqdm
-
-imagePathName = './SingleBubbleImages/Images/'
+print(os.getcwd())
+imagePathName = './data/singleBubbleImages/Images/'
 imageFileNames = list(sorted(glob.glob(imagePathName + "*.tiff")))
-maskPathName = './SingleBubbleImages/Masks/'
+maskPathName = './data/singleBubbleImages/Masks/'
 maskFileNames = list(sorted(glob.glob(maskPathName + "*.tiff")))
 
-saveFolder = './generatedBubbleImages/'
+saveFolder = './data/'
 if not os.path.exists(saveFolder):
     os.makedirs(saveFolder)
 
