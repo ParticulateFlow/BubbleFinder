@@ -6,7 +6,7 @@ setup(
    description='Easy and robust deep learning bubble segmentation',
    author='t.a.m.homan@tue.nl',
    author_email='t.a.m.homan@tue.nl',
-   url='https://pubs.acs.org/doi/10.1021/acs.iecr.3c04059'
+   url='https://pubs.acs.org/doi/10.1021/acs.iecr.3c04059',
    install_requires=[
         'matplotlib', 
         'numpy', 
