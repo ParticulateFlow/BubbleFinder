@@ -3,6 +3,7 @@ import cv2 as cv    #opencv-python
 import glob
 import numpy as np
 from scipy.spatial.distance import cdist
+from tqdm import tqdm
 
 imagePathName = './SingleBubbleImages/Images/'
 imageFileNames = list(sorted(glob.glob(imagePathName + "*.tiff")))
@@ -15,8 +16,8 @@ if not os.path.exists(saveFolder):
 
 numSingleBubbles = len(imageFileNames)
 imageSize = [1001, 601]
-numBubbles = 100
-numImages = 100
+numBubbles = 60
+numImages = 30
 
 frame0 = cv.imread(imageFileNames[0])
 subImageSize = frame0.shape
@@ -33,7 +34,7 @@ if not os.path.exists(savePath):
     os.makedirs(savePath + '/Labels/')
     os.makedirs(savePath + '/Images/')
 
-for i in range(numImages):
+for i in tqdm(range(numImages)):
     boundingBoxName = os.path.join(savePath + '/BoundingBoxes/' + 'BoundingBox%06d.txt' % i)
     fileIDBoundingBox = open(boundingBoxName, "w")
     maskName = os.path.join(savePath + '/Masks/' + 'Mask%06d.txt' % i)

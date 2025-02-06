@@ -13,7 +13,7 @@ def main():
 
     #pathName = sys.argv[1]
     #print("Doing " + pathName + "...")
-    pathName = './generatedBubbleImages/100images_100bubbles_20minDistance_95aperture/'
+    pathName = 'generatedBubbleImages/30images_60bubbles_20minDistance_95aperture'
 
     train = True
 
