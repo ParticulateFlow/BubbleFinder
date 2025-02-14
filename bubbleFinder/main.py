@@ -64,7 +64,7 @@ def main():
                                                        gamma=0.1)
 
         # let's train it for 10 epochs
-        num_epochs = 10
+        num_epochs = 1
 
         for epoch in range(num_epochs):
 
@@ -75,7 +75,7 @@ def main():
             # evaluate on the test dataset
             evaluate(model, data_loader_test, device=device)
 
-        torch.save(model, 'model.pt')
+        torch.save(model, pathName + '/model.pt')
 
         dt = time.time() - t
         print("total training time: " + format(dt, ".0f") + " seconds")

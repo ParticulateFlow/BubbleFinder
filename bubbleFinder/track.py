@@ -19,22 +19,26 @@ import pickle
 
 import torch
 
-import bubble
+from functions import bubble
 
 
 def main():
 
-    pathName = sys.argv[1]
+    # pathName = sys.argv[1]
+    # pathName = "./data/30images_60bubbles_20minDistance_95aperture/"
+    pathName = 'D:/K1Met-P3.1-Bubble-Flows/WP1-Single-Bubble/20240219-Video-2mm-90ml/20240219T1611_d2.0_90ml_250fps/500images_25bubbles_30minDistance_80aperture/Images/'
     print("Doing " + pathName + "...")
 
     imgs = list(sorted(glob.glob(pathName + "*.png")))
+    imgs = imgs[0:10]
+    print(f"Found images = {len(imgs)}")
 
     inference = True
-
+    modelPath = 'D:/K1Met-P3.1-Bubble-Flows/WP1-Single-Bubble/20240219-Video-2mm-90ml/20240219T1611_d2.0_90ml_250fps/model_500images_25bubbles_30minDistance_80apertur_10epoch.pt'
     if inference:
         print('inference...')
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        model = torch.load('model.pt', map_location=device)
+        model = torch.load(modelPath, weights_only=False, map_location=device)
         model.to(device)
         model.eval()
 

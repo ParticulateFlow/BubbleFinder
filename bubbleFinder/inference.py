@@ -1,25 +1,27 @@
 import torch
 import sys
 
-from engine import train_one_epoch, evaluate
-import utils as utils
+from functions.engine import train_one_epoch, evaluate
+from functions import utils as utils
 
 import time
 import glob
 
-import bubble
+from functions import bubble
 import cv2 as cv
 import os
 
 def main():
     #pathName = sys.argv[1]
     #print("Doing " + pathName + "...")
-    pathName = './Inference/'
+    # pathName = './Inference/'
+    pathName='//pfm-daten/scratch/K1Met-P3.1-Bubble-Flows/WP1-Single-Bubble/20240219-Video-2mm-90ml/20240219T1611_d2.0_90ml_250fps/variabel_size_images/125images_80bubbles_80minDistance_40aperture/Images/'
+    pathModel = '//pfm-daten/scratch/K1Met-P3.1-Bubble-Flows/WP1-Single-Bubble/20240219-Video-2mm-90ml/20240219T1611_d2.0_90ml_250fps/variabel_size_images/125images_80bubbles_80minDistance_40aperture/model_10epochs.pt'
 
     print('inference...')
     t = time.time()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = torch.load('model.pt', map_location=device)
+    model = torch.load(pathModel, weights_only=False, map_location=device)
     model.to(device)
     model
     model.eval()

@@ -4,27 +4,29 @@ import glob
 import numpy as np
 from scipy.spatial.distance import cdist
 from tqdm import tqdm
-print(os.getcwd())
-imagePathName = './data/singleBubbleImages/Images/'
+import matplotlib.pyplot as plt
+
+# imagePathName = './data/singleBubbleImages/Images/'
+imagePathName = '//pfm-daten/scratch/K1Met-P3.1-Bubble-Flows/WP1-Single-Bubble/20240219-Video-2mm-90ml/20240219T1611_d2.0_90ml_250fps/variabel_size_images/images/'
 imageFileNames = list(sorted(glob.glob(imagePathName + "*.tiff")))
-maskPathName = './data/singleBubbleImages/Masks/'
+# maskPathName = './data/singleBubbleImages/Masks/'
+maskPathName = '//pfm-daten/scratch/K1Met-P3.1-Bubble-Flows/WP1-Single-Bubble/20240219-Video-2mm-90ml/20240219T1611_d2.0_90ml_250fps/variabel_size_images/maskes/'
 maskFileNames = list(sorted(glob.glob(maskPathName + "*.tiff")))
 
-saveFolder = './data/'
+saveFolder = '//pfm-daten/scratch/K1Met-P3.1-Bubble-Flows/WP1-Single-Bubble/20240219-Video-2mm-90ml/20240219T1611_d2.0_90ml_250fps/variabel_size_images/'
 if not os.path.exists(saveFolder):
     os.makedirs(saveFolder)
 
 numSingleBubbles = len(imageFileNames)
 imageSize = [1001, 601]
-numBubbles = 60
-numImages = 30
+numBubbles = 80
+numImages = 125
 
-frame0 = cv.imread(imageFileNames[0])
-subImageSize = frame0.shape
-xmin = 1; xmax = imageSize[1] - subImageSize[1]
-ymin = 1; ymax = imageSize[0] - subImageSize[0]
-minDistance = 20
-aperture = 95
+# frame0 = cv.imread(filename=imageFileNames[0], flags=cv.IMREAD_GRAYSCALE)
+
+
+minDistance = 80
+aperture = 40
 
 savePath = saveFolder + str(numImages) + 'images_' + str(numBubbles) + 'bubbles_' + str(minDistance) + 'minDistance_' + str(aperture) + 'aperture/'
 if not os.path.exists(savePath):
@@ -42,7 +44,7 @@ for i in tqdm(range(numImages)):
     labelName = os.path.join(savePath + '/Labels/' + 'Label%06d.txt' % i)
     fileIDLabel = open(labelName, 'w')
 
-    Image = np.ones(imageSize) * 170/255
+    Image = np.ones(imageSize) * 200/255
     BBs = []
     Labels = []
     Masks = []
@@ -55,6 +57,12 @@ for i in tqdm(range(numImages)):
     xs = []
     ys = []
     while counter < numBubbles:
+        im = cv.imread(imageFileNames[perm[counter]], cv.IMREAD_GRAYSCALE)
+        subImageSize = im.shape
+        xmin = 1; xmax = imageSize[1] - subImageSize[1]
+        ymin = 1; ymax = imageSize[0] - subImageSize[0]
+
+
         xc = np.random.randint(xmin + aperture, high=xmax - aperture)
         yc = np.random.randint(ymin + aperture, high=ymax - aperture)
 
@@ -66,7 +74,6 @@ for i in tqdm(range(numImages)):
         xs.append(xc)
         ys.append(yc)
 
-        im = cv.imread(imageFileNames[perm[counter]], cv.IMREAD_GRAYSCALE)
         im = im.astype(float) / 255.0
 
         msk = cv.imread(maskFileNames[perm[counter]], cv.IMREAD_GRAYSCALE)
